@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:jusp_1_2_variables/widgets/w01VarieblesWidget.dart';
 import 'package:jusp_1_2_variables/widgets/w02ContenedoresWidget.dart';
+import 'package:jusp_1_2_variables/widgets/w03TicTacToeWidget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
           return ContenedoresWidget();
         }));
         break;
+      case 3:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (BuildContext context) {
+          return TicTacToeWidget();
+        }));
+        break;
     }
   }
 
@@ -66,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () => _iniciarWidget(1), child: Text('Variables')),
               ElevatedButton(
                   onPressed: () => _iniciarWidget(2),
-                  child: Text('Contenedores'))
+                  child: Text('Contenedores')),
+              ElevatedButton(
+                  onPressed: () => _iniciarWidget(3), child: Text("TicTacToe"))
             ],
           ),
         ));
