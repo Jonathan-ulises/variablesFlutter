@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TicTacToeWidget extends StatefulWidget {
@@ -6,42 +8,87 @@ class TicTacToeWidget extends StatefulWidget {
 }
 
 class _TicTacToeWidgetState extends State<TicTacToeWidget> {
-  String jugadorTurno = "X";
+  final Random _random = new Random();
 
+  int numR = _TicTacToeWidgetState.numRandom(0, 2);
+
+  String jugadorTurno = "X";
+  String ganador = "";
+  bool partidaTerminada = false;
+
+  List<String> row0 = ["", "", ""];
   List<String> row1 = ["", "", ""];
   List<String> row2 = ["", "", ""];
-  List<String> row3 = ["", "", ""];
 
-  //Lista de text de botones
-  String pos0_0 = "";
-  String pos0_1 = "";
-  String pos0_2 = "";
-  String pos1_0 = "";
-  String pos1_1 = "";
-  String pos1_2 = "";
-  String pos2_0 = "";
-  String pos2_1 = "";
-  String pos2_2 = "";
+  bool comprobarResultado(String actual) {
+    bool ganador = false;
+    if (row0[0] == actual && row0[1] == actual && row0[2] == actual) {
+      ganador = true;
+    } else if (row1[0] == actual && row1[1] == actual && row1[2] == actual) {
+      ganador = true;
+    } else if (row2[0] == actual && row2[1] == actual && row2[2] == actual) {
+      ganador = true;
+    } else if (row0[0] == actual && row1[1] == actual && row2[2] == actual) {
+      ganador = true;
+    } else if (row2[0] == actual && row1[1] == actual && row0[2] == actual) {
+      ganador = true;
+    } else if (row0[0] == actual && row1[0] == actual && row2[0] == actual) {
+      ganador = true;
+    } else if (row0[1] == actual && row1[1] == actual && row2[1] == actual) {
+      ganador = true;
+    } else if (row0[2] == actual && row1[2] == actual && row2[2] == actual) {
+      ganador = true;
+    }
 
-  // Creating two dimensional list
+    if (ganador) {
+      partidaTerminada = true;
+    }
+
+    return ganador;
+  }
 
   void cambioTurno(String turnoActual) {
+    print("numeroPrint $numR");
     jugadorTurno = turnoActual == "X" ? "O" : "X";
   }
 
-  void _fillBoton(String turnoActual, String posicion) {
+  static int numRandom([int? min, int? max]) {
+    Random _random = new Random();
+    int minInt = (min == null ? 0 : int.parse(min.toString()));
+    int maxInt = (max == null ? 100 : int.parse(max.toString()));
+    int numAleatorio = minInt + _random.nextInt(maxInt - minInt);
+    return numAleatorio;
+  }
+
+  void _fillBox(String turnoActual, int row, int col) {
     setState(() {
-      pos0_0 = turnoActual;
+      if (!partidaTerminada) {
+        switch (row) {
+          case 0:
+            if (row0[col] == "") {
+              row0[col] = turnoActual;
+              cambioTurno(turnoActual);
+            }
+            break;
+          case 1:
+            if (row1[col] == "") {
+              row1[col] = turnoActual;
+              cambioTurno(turnoActual);
+            }
+            break;
+          case 2:
+            if (row2[col] == "") {
+              row2[col] = turnoActual;
+              cambioTurno(turnoActual);
+            }
+            break;
+        }
 
-      switch (posicion) {
-        case 'pos0_0':
-          pos0_0 = turnoActual;
-          break;
+        if (comprobarResultado(turnoActual)) {
+          ganador = "El ganador es $turnoActual";
+        }
       }
-      cambioTurno(turnoActual);
     });
-
-    print(pos0_0);
   }
 
   @override
@@ -53,7 +100,7 @@ class _TicTacToeWidgetState extends State<TicTacToeWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('TicTacToe'),
+          title: const Text('TicTacToe'),
         ),
         body: Center(
           child: Column(
@@ -67,61 +114,65 @@ class _TicTacToeWidgetState extends State<TicTacToeWidget> {
                 crossAxisCount: 3,
                 children: [
                   ElevatedButton(
-                      onPressed: () => _fillBoton(jugadorTurno, pos0_0),
+                      onPressed: () => _fillBox(jugadorTurno, 0, 0),
                       child: Text(
-                        pos0_0,
+                        row0[0],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {pos0_1},
+                      onPressed: () => _fillBox(jugadorTurno, 0, 1),
                       child: Text(
-                        pos0_1,
+                        row0[1],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 0, 2),
                       child: Text(
-                        pos0_2,
+                        row0[2],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 1, 0),
                       child: Text(
-                        pos1_0,
+                        row1[0],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 1, 1),
                       child: Text(
-                        pos1_1,
+                        row1[1],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 1, 2),
                       child: Text(
-                        pos1_2,
+                        row1[2],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 2, 0),
                       child: Text(
-                        pos2_0,
+                        row2[0],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 2, 1),
                       child: Text(
-                        pos2_1,
+                        row2[1],
                         style: TextStyle(fontSize: 80),
                       )),
                   ElevatedButton(
-                      onPressed: () => {},
+                      onPressed: () => _fillBox(jugadorTurno, 2, 2),
                       child: Text(
-                        pos2_2,
+                        row2[2],
                         style: TextStyle(fontSize: 80),
                       ))
                 ],
-              ))
+              )),
+              Text(
+                ganador,
+                style: const TextStyle(fontSize: 32),
+              )
             ],
           ),
         ));
