@@ -10,9 +10,9 @@ class TicTacToeWidget extends StatefulWidget {
 class _TicTacToeWidgetState extends State<TicTacToeWidget> {
   final Random _random = new Random();
 
-  int numR = _TicTacToeWidgetState.numRandom(0, 2);
+  int numR = _TicTacToeWidgetState.numRandom(1, 4);
 
-  String jugadorTurno = "X";
+  String jugadorTurno = "";
   String ganador = "";
   bool partidaTerminada = false;
 
@@ -48,7 +48,6 @@ class _TicTacToeWidgetState extends State<TicTacToeWidget> {
   }
 
   void cambioTurno(String turnoActual) {
-    print("numeroPrint $numR");
     jugadorTurno = turnoActual == "X" ? "O" : "X";
   }
 
@@ -62,6 +61,7 @@ class _TicTacToeWidgetState extends State<TicTacToeWidget> {
 
   void _fillBox(String turnoActual, int row, int col) {
     setState(() {
+      print("numeroPrint $numR");
       if (!partidaTerminada) {
         switch (row) {
           case 0:
@@ -94,6 +94,8 @@ class _TicTacToeWidgetState extends State<TicTacToeWidget> {
   @override
   void initState() {
     super.initState();
+    jugadorTurno = (numR > 2 ? "X" : "O");
+    print(numR);
   }
 
   @override
@@ -105,8 +107,8 @@ class _TicTacToeWidgetState extends State<TicTacToeWidget> {
         body: Center(
           child: Column(
             children: [
-              const Text(
-                "Jugador en Turno",
+              Text(
+                "Jugador en Turno $jugadorTurno",
                 style: TextStyle(fontSize: 24),
               ),
               Expanded(
